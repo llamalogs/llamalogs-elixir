@@ -9,7 +9,8 @@ defmodule Llama.Supervisor do
   def init(:ok) do
     children = [
       {Llama.LogStore, name: Llama.LogStore},
-      {Llama.InitStore, name: Llama.InitStore}
+      {Llama.InitStore, name: Llama.InitStore},
+      {Llama.Timer, name: Llama.Timer}
     ]
 
     Supervisor.init(children, strategy: :one_for_one)

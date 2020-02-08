@@ -3,7 +3,11 @@ defmodule Llama.LogStore do
 
   def init(:ok) do
     IO.puts("init log store")
-    {:ok, %{ aggregate_logs: %{} } }
+    {:ok, init_state() }
+  end
+
+  def init_state() do
+    %{ aggregate_logs: %{} }
   end
 
   def handle_call({:lookup, name}, _from, names) do
@@ -15,16 +19,14 @@ defmodule Llama.LogStore do
     {:reply, log_groups, state}
   end
 
-  def handle_cast({:create, name}, names) do
-    if Map.has_key?(names, name) do
-      {:noreply, names}
-    else
-      {:noreply, names}
-    end
+  def handle_call({:get_and_clear_state}, _from, state) do
+    {:reply, state, init_state()}
   end
 
 # Llama.LogStore.add_log(%{sender: "hi", receiver: "bye", log: "this is log"})
   def handle_cast({:add_message, message}, state) do
+    Llama.Timer.add_time()
+
     initObject = fn () -> 
 			%{
 				sender: message[:sender] || "",
@@ -100,6 +102,7 @@ defmodule Llama.LogStore do
     error_log = if (log.errorLog == "" && message_error), do: message_log, else: log.errorLog
     %{log | log: new_log, errorLog: error_log}
   end
+  
   # Llama.LogStore.log(%{sender: "blah", receiver: "back", graphName: "graph1", log: "this is a log"})
   def log(params) do
     startTimestamp = :os.system_time(:millisecond)
@@ -124,7 +127,7 @@ defmodule Llama.LogStore do
           receiver: receiver,
           timestamp: startTimestamp,
           log: log || "",
-          initialMessage: true,
+          initial_message: true,
           account: accountKey || Llama.InitStore.accountKey || -1,
           graph: graphName || Llama.InitStore.graphName || ""
         }
@@ -135,7 +138,7 @@ defmodule Llama.LogStore do
           sender: receiver,
           receiver: sender,
           startTimestamp: startTimestamp,
-          initialMessage: false,
+          initial_message: false,
           account: accountKey || Llama.InitStore.accountKey || -1,
           graph: graphName || Llama.InitStore.graphName || ""
         }
@@ -191,6 +194,10 @@ defmodule Llama.LogStore do
 
   def get_logs() do
     GenServer.call(__MODULE__, {:get_logs})
+  end
+
+  def get_and_clear_state() do
+    GenServer.call(__MODULE__, {:get_and_clear_state})
   end
 
   def add_message(message) do
