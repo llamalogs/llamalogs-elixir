@@ -24,6 +24,7 @@ defmodule Llama.LogStore do
   end
 
 # Llama.LogStore.add_log(%{sender: "hi", receiver: "bye", log: "this is log"})
+# Llama.LogStore.add_log(%{sender: "Index", receiver: "User", log: "this is log"})
   def handle_cast({:add_message, message}, state) do
     Llama.Timer.add_time()
 
@@ -106,7 +107,7 @@ defmodule Llama.LogStore do
   # Llama.LogStore.log(%{sender: "blah", receiver: "back", graphName: "graph1", log: "this is a log"})
   def log(params) do
     startTimestamp = :os.system_time(:millisecond)
-    defaults = %{sender: "", receiver: "", log: "", graphName: "", accountKey: ""}
+    defaults = %{sender: "", receiver: "", log: "", graphName: nil, accountKey: nil}
     %{
       sender: sender, 
       receiver: receiver, 
@@ -118,9 +119,7 @@ defmodule Llama.LogStore do
     IO.inspect Map.merge(defaults, params)
 
     if (sender != "" && receiver != "") do
-      if (graphName != "" || Llama.InitStore.graphName != "") do
-
-        IO.puts "got ehre"
+      if (graphName || Llama.InitStore.graphName != "") do
 
         message = %{
           sender: sender,

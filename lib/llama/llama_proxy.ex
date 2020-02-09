@@ -1,7 +1,7 @@
 defmodule Llama.Proxy do
-    def send_messages(aggregateLogs, aggregateStats) do
-        final_messages = Enum.reduce(aggregateLogs, [], fn {sender, rec_ob}, outer_acc -> 
-            flat_recs = Enum.reduce(rec_ob, [], fn {receiver, log}, inner_acc -> 
+    def send_messages(aggregateLogs, _aggregateStats) do
+        final_messages = Enum.reduce(aggregateLogs, [], fn {_sender, rec_ob}, outer_acc -> 
+            flat_recs = Enum.reduce(rec_ob, [], fn {_receiver, log}, inner_acc -> 
                 message = %{
                     sender: log[:sender] || "", 
 					receiver: log[:receiver] || "",
@@ -21,5 +21,11 @@ defmodule Llama.Proxy do
         end) 
 
         IO.inspect final_messages
+
+        body = %{ time_logs: final_messages }
+        string_body = Poison.encode!(body)
+        url = "http://localhost:4000/api/timelogs"
+        result = HTTPoison.post url, string_body, [{"Content-Type", "application/json"}]
+        IO.inspect result
     end
 end
