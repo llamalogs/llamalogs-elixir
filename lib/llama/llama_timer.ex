@@ -42,6 +42,8 @@ defmodule Llama.Timer do
         :timer.sleep(5000)
         IO.inspect "timer off"
         Llama.Timer.clear_pid()
+        # could be a problem if we kill right after this line
+        # should just use 30 sec loop
         %{aggregate_logs: aggregate_logs} = Llama.LogStore.get_and_clear_state()
         Llama.Proxy.send_messages(aggregate_logs, %{})
         
