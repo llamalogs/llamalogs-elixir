@@ -10,6 +10,8 @@ defmodule LlamaLogs.MixProject do
       deps: deps(),
       description: description(),
       package: package(),
+      source_url: "https://github.com/llamalogs/llamalogs-elixir",
+      homepage_url: "https://llamalogs.com"
     ]
   end
 
