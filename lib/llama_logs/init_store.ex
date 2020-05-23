@@ -1,4 +1,4 @@
-defmodule Llama.InitStore do
+defmodule LlamaLogs.InitStore do
   use Agent
 
   def start_link(_opts) do

@@ -1,9 +1,9 @@
-defmodule Llama.MixProject do
+defmodule LlamaLogs.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :bakenator_test_llama_client,
+      app: :llama_logs,
       version: "0.1.0",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
@@ -18,7 +18,7 @@ defmodule Llama.MixProject do
     [
       extra_applications: [:logger],
       # added influx here, seems cool to add libs
-      mod: {Llama, []}
+      mod: {LlamaLogs, []}
     ]
   end
 
@@ -33,7 +33,7 @@ defmodule Llama.MixProject do
   end
 
   defp description() do
-    "A test package to see if downloading from hex works for this thing"
+    "Client for LlamaLogs service"
   end
 
   defp package() do
