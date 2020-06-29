@@ -1,3 +1,5 @@
+# publish info https://hex.pm/docs/publish
+
 defmodule LlamaLogs.MixProject do
   use Mix.Project
 
@@ -20,7 +22,7 @@ defmodule LlamaLogs.MixProject do
     [
       extra_applications: [:logger],
       # added influx here, seems cool to add libs
-      mod: {LlamaLogs, []}
+      # mod: {LlamaLogs, []}
     ]
   end
 

@@ -2,10 +2,9 @@ defmodule LlamaLogs.InitStore do
   use Agent
 
   def start_link(_opts) do
-    IO.puts("start link init store")
     init_value = %{
-        accountKey: "",
-        graphName: ""
+        account_key: "",
+        graph_name: ""
     }
     Agent.start_link(fn -> init_value end, name: __MODULE__)
   end
@@ -14,20 +13,20 @@ defmodule LlamaLogs.InitStore do
     Agent.get(__MODULE__, & &1)
   end
 
-  def graphName do
-    value().graphName
+  def graph_name do
+    value().graph_name
   end
 
-  def accountKey do
-    value().accountKey
+  def account_key do
+    value().account_key
   end
 
   def update(new_value) do
-    new_account_key = new_value[:accountKey] || ""
-    new_graph_name = new_value[:graphName] || ""
+    new_account_key = new_value[:account_key] || ""
+    new_graph_name = new_value[:graph_name] || ""
     Agent.update(__MODULE__, fn _state -> %{
-        accountKey: new_account_key,
-        graphName: new_graph_name
+        account_key: new_account_key,
+        graph_name: new_graph_name
     } end)
   end
 end

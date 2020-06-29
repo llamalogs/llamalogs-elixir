@@ -6,8 +6,8 @@ defmodule LlamaLogs.LogAggregator do
       name: "",
       value: 0,
       type: type,
-      accountKey: LlamaLogs.InitStore.accountKey || "", 
-      graphName: LlamaLogs.InitStore.graphName || "",
+      account_key: LlamaLogs.InitStore.account_key || "", 
+      graph_name: LlamaLogs.InitStore.graph_name || "",
     }
 
     stat = Map.merge(defaults, params)
@@ -33,26 +33,21 @@ defmodule LlamaLogs.LogAggregator do
   end
 
   def log(params, return_log \\ %{}) do
-    IO.inspect "log add: log"
-    IO.inspect params
-
     defaults = %{
       sender: "", 
       receiver: "", 
-      log: "", 
-      error: false, 
+      message: "", 
+      is_error: false, 
       elapsed: 0,
-      accountKey: LlamaLogs.InitStore.accountKey, 
-      graphName: LlamaLogs.InitStore.graphName,
+      account_key: LlamaLogs.InitStore.accountKey, 
+      graph_name: LlamaLogs.InitStore.graphName,
       initial_message: true
     }
 
     w_return = Map.merge(defaults, return_log)
     message = Map.merge(w_return, params)
 
-    IO.inspect message
-
-    if (message[:sender] != "" && message[:receiver] != "" && message[:graphName] != "") do
+    if (message[:sender] != "" && message[:receiver] != "" && message[:graph_name] != "") do
         start_timestamp = :os.system_time(:millisecond)
 
         api_message = log_param_to_api_format(message, start_timestamp)
@@ -73,11 +68,11 @@ defmodule LlamaLogs.LogAggregator do
       sender: log[:sender],
       receiver: log[:receiver],
       timestamp: start_timestamp,
-      log: Kernel.inspect(log[:log]),
+      message: Kernel.inspect(log[:log]),
       initial_message: log[:initial_message],
-      account: log[:accountKey],
-      graph: log[:graphName],
-      error: log[:error],
+      account: log[:account_key],
+      graph: log[:graph_name],
+      is_error: log[:is_error],
       elapsed: elapsed
     }
   end
@@ -88,8 +83,8 @@ defmodule LlamaLogs.LogAggregator do
       receiver: log[:sender],
       start_timestamp: start_timestamp,
       initial_message: false,
-      accountKey: log[:accountKey],
-      graphName: log[:graphName]
+      account_key: log[:accountKey],
+      graph_name: log[:graphName]
     }
   end
 

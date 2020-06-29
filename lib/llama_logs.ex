@@ -1,11 +1,18 @@
 defmodule LlamaLogs do
-  use Application
 
-  @impl true
-  def start(_type, _args) do
-    # Although we don't use the supervisor name below directly,
-    # it can be useful when debugging or introspecting the system.
-    LlamaLogs.Supervisor.start_link(name: LlamaLogs.Supervisor)
+  def start_link(args) do
+    {:ok, pid} = LlamaLogs.Supervisor.start_link(name: LlamaLogs.Supervisor)
+    [account_key, graph_name] = args
+    LlamaLogs.init(%{account_key: account_key, graph_name: graph_name})
+    {:ok, pid}
+  end
+
+  def child_spec(opts) do
+    %{
+      id: __MODULE__,
+      start: {__MODULE__, :start_link, [opts]},
+      type: :worker
+    }
   end
 
   def init(opts \\ %{}) do
@@ -31,7 +38,6 @@ defmodule LlamaLogs do
   end
 
   def log(params \\ %{}, return_log \\ %{}) do
-    IO.inspect("llama:log")
     LlamaLogs.LogAggregator.log(params, return_log)
   end
 

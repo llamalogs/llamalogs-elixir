@@ -2,7 +2,6 @@ defmodule LlamaLogs.LogStore do
   use GenServer
 
   def init(:ok) do
-    IO.puts("init log store")
     {:ok, init_state() }
   end
 
@@ -114,11 +113,11 @@ defmodule LlamaLogs.LogStore do
     # deconstructing ob
     existing_sender_log_group = Map.get(log_groups, sender, %{})
     new_log = Map.get(existing_sender_log_group, receiver, LlamaLogs.LogStore.init_object(message))
-      |> update_error_count(message[:error])
+      |> update_error_count(message[:is_error])
       |> update_initial_message_count(message[:initial_message])
       |> update_elapsed(message[:elapsed])
       |> update_total_count()
-      |> add_logs(message[:error], message[:log])
+      |> add_logs(message[:is_error], message[:message])
 
     # rewrapping ob
     new_sender_log_group = Map.put(existing_sender_log_group, receiver, new_log)
@@ -138,8 +137,8 @@ defmodule LlamaLogs.LogStore do
         errors: 0,
         elapsed: 0,
         elapsed_count: 0,
-        log: "",
-        errorLog: "",
+        message: "",
+        errorMessage: "",
         initialMessageCount: 0,
         graph: message[:graph] || ""
     }
@@ -186,9 +185,7 @@ defmodule LlamaLogs.LogStore do
   end
 
   def start_link(opts) do
-    IO.puts("start link log store")
     resp = GenServer.start_link(__MODULE__, :ok, opts)
-    IO.inspect resp
     resp
   end
 

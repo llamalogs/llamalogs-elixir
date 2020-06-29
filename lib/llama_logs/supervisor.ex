@@ -7,10 +7,6 @@ defmodule LlamaLogs.Supervisor do
 
   @impl true
   def init(:ok) do
-    IO.puts "super pid"
-    IO.inspect self()
-
-
     children = [
       {LlamaLogs.LogStore, name: LlamaLogs.LogStore},
       {LlamaLogs.InitStore, name: LlamaLogs.InitStore},

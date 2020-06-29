@@ -1,21 +1,11 @@
-# Llama
+# Llama Logs
 
-**TODO: Add description**
+Find offical documentation at Llama Logs website
 
-## Installation
+[llamalogs.com/docs/elixir](https://llamalogs.com/docs/elixir)
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `llama` to your list of dependencies in `mix.exs`:
+What is Llama Logs?
+[llamalogs.com/docs/what](https://llamalogs.com/docs/what)
 
-```elixir
-def deps do
-  [
-    {:llama, "~> 0.1.0"}
-  ]
-end
-```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/llama](https://hexdocs.pm/llama).
-
+Getting Started Guide
+[llamalogs.com/docs/getting-started](https://llamalogs.com/docs/getting-started)
