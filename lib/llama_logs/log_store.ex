@@ -60,7 +60,9 @@ defmodule LlamaLogs.LogStore do
     new_stat_groups = Map.put(stat_groups, component, new_component_stat_group)
 
     new_state = %{state | aggregate_stats: new_stat_groups}
-    IO.inspect new_state
+    if LlamaLogs.InitStore.is_dev_env do
+      IO.inspect new_state
+    end
     {:noreply, new_state}
   end
 
@@ -79,7 +81,9 @@ defmodule LlamaLogs.LogStore do
     new_stat_groups = Map.put(stat_groups, component, new_component_stat_group)
 
     new_state = %{state | aggregate_stats: new_stat_groups}
-    IO.inspect new_state
+    if LlamaLogs.InitStore.is_dev_env do
+      IO.inspect new_state
+    end
     {:noreply, new_state}
   end
 
@@ -100,7 +104,9 @@ defmodule LlamaLogs.LogStore do
     new_stat_groups = Map.put(stat_groups, component, new_component_stat_group)
 
     new_state = %{state | aggregate_stats: new_stat_groups}
-    IO.inspect new_state
+    if LlamaLogs.InitStore.is_dev_env do
+      IO.inspect new_state
+    end
     {:noreply, new_state}
   end
 
@@ -124,7 +130,9 @@ defmodule LlamaLogs.LogStore do
     new_log_groups = Map.put(log_groups, sender, new_sender_log_group)
 
     new_state = %{state | aggregate_logs: new_log_groups}
-    IO.inspect new_state
+    if LlamaLogs.InitStore.is_dev_env do
+      IO.inspect new_state
+    end
     {:noreply, new_state}
   end
 
@@ -138,7 +146,7 @@ defmodule LlamaLogs.LogStore do
         elapsed: 0,
         elapsed_count: 0,
         message: "",
-        errorMessage: "",
+        error_message: "",
         initialMessageCount: 0,
         graph: message[:graph] || ""
     }
@@ -178,10 +186,10 @@ defmodule LlamaLogs.LogStore do
     %{log | elapsed: elapsed, elapsed_count: elapsed_count}
   end
 
-  def add_logs(log, message_error, message_log) do
-    new_log = if (log.log == "" && !message_error), do: message_log, else: log.log
-    error_log = if (log.errorLog == "" && message_error), do: message_log, else: log.errorLog
-    %{log | log: new_log, errorLog: error_log}
+  def add_logs(log, log_error, log_message) do
+    message = if (log.message == "" && !log_error), do: log_message, else: log.message
+    error_message = if (log.error_message == "" && log_error), do: log_message, else: log.error_message
+    %{log | message: message, error_message: error_message}
   end
 
   def start_link(opts) do

@@ -3,6 +3,17 @@ defmodule LlamaLogs.Supervisor do
 
   def start_link(opts) do
     Supervisor.start_link(__MODULE__, :ok, opts)
+    account_key = Enum.at(opts, 0)
+    graph_name = Enum.at(opts, 1)
+    disabled = Enum.at(opts, 2)
+    is_dev_env = Enum.at(opts, 3)
+
+    LlamaLogs.InitStore.update(%{
+      account_key: account_key,
+      graph_name: graph_name,
+      disabled: disabled,
+      is_dev_env: is_dev_env
+    })
   end
 
   @impl true

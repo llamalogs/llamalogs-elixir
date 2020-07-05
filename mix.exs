@@ -21,8 +21,6 @@ defmodule LlamaLogs.MixProject do
   def application do
     [
       extra_applications: [:logger],
-      # added influx here, seems cool to add libs
-      # mod: {LlamaLogs, []}
     ]
   end
 

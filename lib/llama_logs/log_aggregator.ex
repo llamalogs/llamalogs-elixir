@@ -39,15 +39,18 @@ defmodule LlamaLogs.LogAggregator do
       message: "", 
       is_error: false, 
       elapsed: 0,
-      account_key: LlamaLogs.InitStore.accountKey, 
-      graph_name: LlamaLogs.InitStore.graphName,
+      account_key: LlamaLogs.InitStore.account_key, 
+      graph_name: LlamaLogs.InitStore.graph_name,
       initial_message: true
     }
 
     w_return = Map.merge(defaults, return_log)
     message = Map.merge(w_return, params)
 
-    if (message[:sender] != "" && message[:receiver] != "" && message[:graph_name] != "") do
+    has_req_fields = message[:sender] != "" && message[:receiver] != "" && message[:graph_name] != "" && message[:account_key] != ""
+
+    cond do
+      has_req_fields -> 
         start_timestamp = :os.system_time(:millisecond)
 
         api_message = log_param_to_api_format(message, start_timestamp)
@@ -55,6 +58,7 @@ defmodule LlamaLogs.LogAggregator do
 
         return_log_data = create_return_log(message, start_timestamp)
         return_log_data
+      true -> nil
     end
   end
 
@@ -68,7 +72,7 @@ defmodule LlamaLogs.LogAggregator do
       sender: log[:sender],
       receiver: log[:receiver],
       timestamp: start_timestamp,
-      message: Kernel.inspect(log[:log]),
+      message: log[:message],
       initial_message: log[:initial_message],
       account: log[:account_key],
       graph: log[:graph_name],
