@@ -27,6 +27,17 @@ defmodule LlamaTest do
     assert string_logs == expected_logs
   end
 
+  test "logs handle null messages" do
+    LlamaLogs.log(%{sender: "send2", is_error: true, receiver: "rec1", message: nil, account_key: "acc2", graph_name: "graph_2"})
+    LlamaLogs.log(%{sender: "send2", receiver: "rec1", message: nil, account_key: "acc2", graph_name: "graph_2"})
+    {formatted_logs, _formatted_stats} = LlamaLogs.Proxy.collect_messages()
+    string_logs = Poison.encode!(formatted_logs)
+
+    expected_logs = "[{\"sender\":\"send2\",\"receiver\":\"rec1\",\"message\":\"\",\"initialMessageCount\":2,\"graph\":\"graph_2\",\"errorMessage\":\"\",\"errorCount\":1,\"count\":2,\"account\":\"acc2\"}]"
+
+    assert string_logs == expected_logs
+  end
+
   test "disabling client" do
     LlamaLogs.InitStore.update(%{disabled: true})
     LlamaLogs.log(%{sender: "send1", receiver: "rec1", message: "hi", account_key: "acc2", graph_name: "graph_2"})
