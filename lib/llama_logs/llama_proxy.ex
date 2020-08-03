@@ -40,7 +40,7 @@ defmodule LlamaLogs.Proxy do
                 _ -> "https://llamalogs.com/api/v0/timedata"
             end
 
-            HTTPoison.post url, string_body, [{"Content-Type", "application/json"}]
+            HTTPoison.post url, string_body, [{"Content-Type", "application/json"}], [timeout: 2_000, recv_timeout: 5_000]
         end
     end
 

@@ -1,8 +1,7 @@
 defmodule LlamaLogs do
 
   def start_link(args) do
-    {:ok, pid} = LlamaLogs.Supervisor.start_link(name: LlamaLogs.Supervisor)
-    {:ok, pid}
+    LlamaLogs.Supervisor.start_link(args)
   end
 
   def child_spec(opts) do
