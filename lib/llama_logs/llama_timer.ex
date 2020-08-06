@@ -8,7 +8,11 @@ defmodule LlamaLogs.Timer do
     end
 
     :timer.sleep(sleep_time)
-    IO.inspect "sending messages"
+    
+    if LlamaLogs.InitStore.is_dev_env do
+      IO.inspect "sending messages"
+    end
+    
     LlamaLogs.Proxy.send_messages()
     run_time(false)
   end
